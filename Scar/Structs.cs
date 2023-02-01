@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.ML.Data;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -45,58 +46,56 @@ namespace Scar
 		public partial class AudioFeatureElement
 		{
 			[JsonPropertyName("danceability")]
-			public double Danceability { get; set; }
+			public float Danceability { get; set; }
 
 			[JsonPropertyName("energy")]
-			public double Energy { get; set; }
+			public float Energy { get; set; }
 
 			[JsonPropertyName("key")]
-			public long Key { get; set; }
+			public float Key { get; set; }
 
 			[JsonPropertyName("loudness")]
-			public double Loudness { get; set; }
+			public float Loudness { get; set; }
 
 			[JsonPropertyName("mode")]
-			public long Mode { get; set; }
+			public float Mode { get; set; }
 
 			[JsonPropertyName("speechiness")]
-			public double Speechiness { get; set; }
+			public float Speechiness { get; set; }
 
 			[JsonPropertyName("acousticness")]
-			public double Acousticness { get; set; }
+			public float Acousticness { get; set; }
 
 			[JsonPropertyName("instrumentalness")]
-			public double Instrumentalness { get; set; }
+			public float Instrumentalness { get; set; }
 
 			[JsonPropertyName("liveness")]
-			public double Liveness { get; set; }
+			public float Liveness { get; set; }
 
 			[JsonPropertyName("valence")]
-			public double Valence { get; set; }
+			public float Valence { get; set; }
 
 			[JsonPropertyName("tempo")]
-			public double Tempo { get; set; }
+			public float Tempo { get; set; }
 
-			[JsonPropertyName("type")]
-			public string Type { get; set; }
-
-			[JsonPropertyName("id")]
-			public string Id { get; set; }
-
-			[JsonPropertyName("uri")]
-			public string Uri { get; set; }
-
-			[JsonPropertyName("track_href")]
-			public Uri TrackHref { get; set; }
-
-			[JsonPropertyName("analysis_url")]
-			public Uri AnalysisUrl { get; set; }
-
+			/*
 			[JsonPropertyName("duration_ms")]
-			public long DurationMs { get; set; }
+			public float DurationMs { get; set; }
+			*/
 
 			[JsonPropertyName("time_signature")]
-			public long TimeSignature { get; set; }
+			public float TimeSignature { get; set; }
+
+			[ColumnName("Label")]
+			public bool IsLiked { get; set; }
+		}
+
+		public class SongBinaryPrediction
+		{
+			[ColumnName("PredictedLabel")]
+			public bool LikingPrediction { get; set; }
+			public float Probability { get; set; }
+			public float Score { get; set; }
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace Scar
 	class Spotify
 	{
 		private const string loginUrl = "https://accounts.spotify.com/api/token";
-		private const string trackFeatureUrl = "https://api.spotify.com/v1/audio-features?ids=";
+		private const string tracksFeatureUrl = "https://api.spotify.com/v1/audio-features?ids=";
 		private const string playlistTracksUrl = "https://api.spotify.com/v1/playlists/{0}/tracks?fields=items(track(name,id))";
 
 		private readonly Secrets secrets = JsonSerializer.Deserialize<Secrets>(File.ReadAllText("secrets.json"));
@@ -71,9 +71,25 @@ namespace Scar
 			}
 		}
 
-		public AudioAnalysis GetTrackFeatures(HashSet<string> ids) 
+		public AudioAnalysis GetTracksFeatures(HashSet<string> ids) 
 		{
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(trackFeatureUrl + string.Join(",", ids));
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(tracksFeatureUrl + string.Join(",", ids));
+			request.Headers.Add("Authorization", "Bearer " + token);
+			request.Method = "GET";
+			request.ContentType = "application/json";
+
+			Task<WebResponse> response = request.GetResponseAsync();
+			Spinner.Show(response);
+			HttpWebResponse trackFeatureResponse = (HttpWebResponse)response.Result;
+
+			return JsonSerializer.Deserialize<AudioAnalysis>(
+				new StreamReader(trackFeatureResponse.GetResponseStream()).ReadToEnd()
+			);
+		}
+
+		public AudioAnalysis GetTrackFeatures(string id) 
+		{
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(tracksFeatureUrl + id);
 			request.Headers.Add("Authorization", "Bearer " + token);
 			request.Method = "GET";
 			request.ContentType = "application/json";
